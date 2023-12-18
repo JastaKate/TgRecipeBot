@@ -40,11 +40,10 @@ public class BotListenerLongPoll extends TelegramLongPollingBot {
     private final TelegramBotSender telegramBotSender;
     private final PersonRepo personRepo;
     private final AdsRepo adsRepo;
-//    private final BreakfastsRepo breakfastsRepo;
-//    private final BrIngredientsRepo ingredientsRepo;
 
 
-    static final String HELP_TEXT = "This bot is created to demonstrate Spring capabilities.\n\n" +
+
+    static final String HELP_TEXT = "Using this bot you can get recipes to choose from if you don't know what to cook\n\n" +
             "You can execute commands from the main menu on the left or by typing a command:\n\n" +
             "Type /start to see a welcome message\n\n" +
             "Type /recipe to chose recipe you want\n\n" +
@@ -56,15 +55,11 @@ public class BotListenerLongPoll extends TelegramLongPollingBot {
     public BotListenerLongPoll(TelegramBotProperty property, TelegramBotSender sender, PersonRepo personRepo, AdsRepo adsRepo) {
         super(property.getToken());
         telegramBotProperty = property;
-//        this.breakfastsRepo = breakfastsRepo;
         telegramBotSender = sender;
         this.personRepo = personRepo;
         this.adsRepo = adsRepo;
-//        this.ingredientsRepo = ingredientsRepo;
         List<BotCommand> listofCommands = new ArrayList<>();
         listofCommands.add(new BotCommand("/start", "get a welcome message"));
-        listofCommands.add(new BotCommand("/mydata", "get your data stored"));
-        listofCommands.add(new BotCommand("/deletedata", "delete my data"));
         listofCommands.add(new BotCommand("/help", "info how to use this bot"));
         listofCommands.add(new BotCommand("/recipe", "chose recipe"));
         try {
@@ -118,16 +113,6 @@ public class BotListenerLongPoll extends TelegramLongPollingBot {
             }
             
         }
-
-        //Replay to message
-//        try {
-//            telegramBotSender.sendMessageBy(update.getMessage().getChatId(),
-//                    update.getMessage().getMessageId(),
-//                    update.getMessage().getText());
-//            log.info(String.format("ChatId : %s", update.getMessage().getChatId().toString()));
-//        } catch (TelegramApiException e) {
-//            log.info(e.getMessage());
-//        }
     }
 
     private void registerUser(Message msg) {
