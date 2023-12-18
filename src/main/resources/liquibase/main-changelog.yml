@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: persons
+      author: Kate
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+                tableName: persons
+      changes:
+        - createTable:
+            tableName: persons
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  autoIncrement: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+            ifNotExists: true
+            schemaName: public
+  - changeSet:
+      id: ads
+      author: Kate
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            - tableExists:
+                tableName: ads
+      changes:
+        - createTable:
+            tableName: ads
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  autoIncrement: true
+              - column:
+                  name: text
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: ads1
+      author: Kate
+      changes:
+        - insert:
+            tableName: ads
+            columns:
+              - column:
+                  name: text
+                  value: "ad text:  don't waste another minute with basic meals. 
+                  Level up your cooking game with 'Flavors Unleashed' - the ultimate weapon in your quest for culinary greatness. Grab your copy today"

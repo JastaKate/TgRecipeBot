@@ -1,0 +1,17 @@
+server:
+  port: 8093
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    password: 5744
+    url: jdbc:postgresql://localhost:5433/persons
+    username: postgres
+
+  liquibase:
+    change-log: classpath:liquibase/main-changelog.yml
+
+telegram-bot:
+  config:
+    name: CulinaryGenieBot
+    token: 6779771332:AAF_KkTdtECWmKyrdbYBemZAIi1t0svLMWo
