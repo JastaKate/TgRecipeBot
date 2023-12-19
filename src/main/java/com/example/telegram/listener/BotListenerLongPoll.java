@@ -96,16 +96,29 @@ public class BotListenerLongPoll extends TelegramLongPollingBot {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
 
             if (callbackData.equals(BREAKFAST_BUTTON)) {
-
-                String text = "data from database breakfast";
                 getBreakfasts(chatId);
-                executeMessageText(text, chatId,messageId);
+                EditMessageText messageText = new EditMessageText();
+                messageText.setChatId(String.valueOf(chatId));
+                messageText.setMessageId((int) messageId);
+
+                try {
+                    execute(messageText);
+                } catch (TelegramApiException e) {
+                    log.error(ERROR_TEXT + e.getMessage());
+                }
 
 
             } else if (callbackData.equals(DINNER_BUTTON)) {
-                String text = "data from database dinner";
                 getDinners(chatId);
-                executeMessageText(text, chatId,messageId);
+                EditMessageText messageText = new EditMessageText();
+                messageText.setChatId(String.valueOf(chatId));
+                messageText.setMessageId((int) messageId);
+
+                try {
+                    execute(messageText);
+                } catch (TelegramApiException e) {
+                    log.error(ERROR_TEXT + e.getMessage());
+                }
             }
             
         }
