@@ -1,18 +1,14 @@
 package com.example.telegram.listener;
 
-//import com.example.telegram.entity.BrIngredients;
-//import com.example.telegram.entity.Breakfasts;
+
 import com.example.telegram.entity.Ads;
 import com.example.telegram.entity.Person;
 import com.example.telegram.property.TelegramBotProperty;
-//import com.example.telegram.repository.BrIngredientsRepo;
-//import com.example.telegram.repository.BreakfastsRepo;
 import com.example.telegram.repository.AdsRepo;
 import com.example.telegram.repository.PersonRepo;
-import com.example.telegram.sender.TelegramBotSender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -37,9 +33,9 @@ import java.util.Map;
 public class BotListenerLongPoll extends TelegramLongPollingBot {
 
     private final TelegramBotProperty telegramBotProperty;
-    private final TelegramBotSender telegramBotSender;
     private final PersonRepo personRepo;
     private final AdsRepo adsRepo;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
 
 
@@ -52,12 +48,12 @@ public class BotListenerLongPoll extends TelegramLongPollingBot {
     static final String DINNER_BUTTON = "Dinner recipe";
     static final String ERROR_TEXT = "Error occurred: ";
 
-    public BotListenerLongPoll(TelegramBotProperty property, TelegramBotSender sender, PersonRepo personRepo, AdsRepo adsRepo) {
+    public BotListenerLongPoll(TelegramBotProperty property, PersonRepo personRepo, AdsRepo adsRepo, KafkaTemplate<String, String> kafkaTemplate) {
         super(property.getToken());
         telegramBotProperty = property;
-        telegramBotSender = sender;
         this.personRepo = personRepo;
         this.adsRepo = adsRepo;
+        this.kafkaTemplate = kafkaTemplate;
         List<BotCommand> listofCommands = new ArrayList<>();
         listofCommands.add(new BotCommand("/start", "get a welcome message"));
         listofCommands.add(new BotCommand("/help", "info how to use this bot"));
@@ -126,7 +122,8 @@ public class BotListenerLongPoll extends TelegramLongPollingBot {
             person.setUsername(chat.getUserName());
 
             personRepo.save(person);
-            log.info("User saved: " + person);
+            kafkaTemplate.send("bot-topic", "User saved");
+
         }
     }
 

@@ -13,7 +13,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: serial
+                  type: bigint
                   constraints:
                     nullable: false
                     primaryKey: true
